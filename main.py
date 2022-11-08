@@ -6,7 +6,7 @@ app = FastAPI()
 
 
 @app.get("/ping")
-def print():
+def print_str():
     return "pong"
 
 

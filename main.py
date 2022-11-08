@@ -1,26 +1,31 @@
-from datetime import date
-from typing import Optional
+from fastapi import FastAPI
 
-from pydantic import BaseModel
-from fastapi import FastAPI, Path
-from employee_details import emp_data
+from employee_details import emp_list, emp_id_map, emp_name_map,Item
 
 app = FastAPI()
 
 
-class NewData(BaseModel):
-    id: int
-    name: str
-    date_of_birth: date
+@app.get("/ping")
+def print():
+    return "pong"
 
 
-@app.get("/emp_data/{emp_id}")
-def get_emp_data(emp_id: int = Path(None, description="Enter the id")):
-    return emp_data[emp_id]
+@app.get("/all_employees/")
+def get_emp_data():
+    return emp_list
 
 
-@app.post("/add_data")
-def update_emp_data(data: NewData):
-    print(f"data is: {data}")
-    emp_data.append(data)
-    return emp_data
+@app.get("/employee/")
+def get_emp_data(id: int):
+    return emp_id_map[id]
+
+
+@app.get("/employee_by_name/")
+def get_emp_data(name: str):
+    return emp_name_map[name]
+
+
+@app.post("/update_emp_data/")
+def update_emp_data(data: Item):
+    emp_list.append(data.dict())
+    return {"updated list": emp_list}

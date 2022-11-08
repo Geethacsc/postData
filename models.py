@@ -1,10 +1,6 @@
-import sqlalchemy
-from alembic.ddl import sqlite
 from sqlalchemy import Table, Integer, String, Column, MetaData, create_engine
-from 9f084a21df27_baseline.py import employee_data
+
 engine = create_engine('sqlite:///company.db', echo=True)
-#sqlalchemy.url=sqlite:///company.db
-class employee_data:
 meta = MetaData()
 
 employees = Table(

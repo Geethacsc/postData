@@ -16,6 +16,9 @@ def get_emp_data():
 
 
 @app.get("/employee/")
+Password for user test:
+
+
 def get_emp_data(id: int):
     return emp_id_map[id]
 

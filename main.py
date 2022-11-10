@@ -12,10 +12,10 @@ def get_all_employees():
     return session.query(Employee).all()
 
 
-# @app.get("/v2/employee")
-# def get_employee_by_id(e_id: int):
-#     return session.query(Employee).filter(Employee.id == e_id).first()
-#
+@app.get("/v2/employee")
+def get_employee_by_id(e_id: int):
+    return session.query(Employee).filter(Employee.id == e_id).first()
+
 
 @app.get("/ping")
 def print_str():

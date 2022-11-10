@@ -13,8 +13,8 @@ def get_all_employees():
 
 
 @app.get("/v2/employee")
-def get_employee_by_id(e_id: int):
-    return session.query(Employee).filter(Employee.id == e_id).first()
+def get_employee_by_id(emp_id: int):
+    return session.query(Employee).filter(Employee.id == emp_id).first()
 
 
 @app.get("/ping")

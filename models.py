@@ -13,3 +13,4 @@ class Employee(Base):
     name = Column(String, unique=True)
     yob = Column(Date)
     gender = Column(String(1))
+    email_id=Column(String)

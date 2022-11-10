@@ -12,3 +12,4 @@ class Employee(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=True)
     yob = Column(Date)
+    gender = Column(String(1))

@@ -1,9 +1,21 @@
 from fastapi import FastAPI
 
-from employee_details import emp_list, emp_id_map, emp_name_map,Item
+from database import session
+from employee_details import emp_list, emp_id_map, emp_name_map, Item
+from models import Employee
 
 app = FastAPI()
 
+
+@app.get("/v2/all_employees")
+def get_all_employees():
+    return session.query(Employee).all()
+
+
+# @app.get("/v2/employee")
+# def get_employee_by_id(e_id: int):
+#     return session.query(Employee).filter(Employee.id == e_id).first()
+#
 
 @app.get("/ping")
 def print_str():

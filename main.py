@@ -1,5 +1,4 @@
 from fastapi import FastAPI, Body
-from sqlalchemy import Date
 
 import models
 from database import session, Session
@@ -39,11 +38,11 @@ def update_database(old_yob: int = Body(..., embed=True), new_yob: int = Body(..
         session.query(Employee).filter(Employee.yob == old_yob). \
             update({Employee.yob: new_yob}, synchronize_session=False)
         session.commit()
-    return session.query(Employee).all()
+    return session.query(Employee).filter(Employee.yob == new_yob).all()
 
 
 @app.patch("/v2/delete_employee")
-def delete_data(data: Year):
+def delete_data(year: Year):
     return session.query(Employee).filter(Employee.yob == 2010). \
         delete(synchronize_session=False)
 
@@ -59,8 +58,8 @@ def get_emp_data():
 
 
 @app.get("/employee/")
-def get_emp_data(id: int):
-    return emp_id_map[id]
+def get_emp_data(emp_id: int):
+    return emp_id_map[emp_id]
 
 
 @app.get("/employee_by_name/")

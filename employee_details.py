@@ -19,3 +19,8 @@ class Item(BaseModel):
     id: int
     name: str
     position: str
+
+
+class Year(BaseModel):
+
+    yob: int

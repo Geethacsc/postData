@@ -1,7 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
+from sqlalchemy import Date
 
-from database import session
-from employee_details import emp_list, emp_id_map, emp_name_map, Item
+import models
+from database import session, Session
+from employee_details import emp_list, emp_id_map, emp_name_map, Item, Year
 from models import Employee
 
 app = FastAPI()
@@ -12,9 +14,38 @@ def get_all_employees():
     return session.query(Employee).all()
 
 
+# @app.get("/v2/employee")
+# def get_employee_by_id(emp_id: int):
+#     return session.query(Employee).filter_by(id=emp_id).first()
+# the abelow method can be performed using the above /v2/employee in comments
+
 @app.get("/v2/employee")
 def get_employee_by_id(emp_id: int):
     return session.query(Employee).filter(Employee.id == emp_id).first()
+
+
+@app.put("/v2/update_employee")
+def update_data(emp: Year):
+    with session.begin():
+        session.query(Employee).filter(Employee.yob == 2010). \
+            update({Employee.yob: emp.yob}, synchronize_session=False)
+        session.commit()
+    return session.query(Employee).filter(Employee.yob == emp.yob).all()
+
+
+@app.put("/v2/update_employees")
+def update_database(old_yob: int = Body(..., embed=True), new_yob: int = Body(..., embed=True)):
+    with session.begin():
+        session.query(Employee).filter(Employee.yob == old_yob). \
+            update({Employee.yob: new_yob}, synchronize_session=False)
+        session.commit()
+    return session.query(Employee).all()
+
+
+@app.patch("/v2/delete_employee")
+def delete_data(data: Year):
+    return session.query(Employee).filter(Employee.yob == 2010). \
+        delete(synchronize_session=False)
 
 
 @app.get("/ping")

@@ -1,5 +1,3 @@
-
-
 from sqlalchemy import Integer, Column, String, Date
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -11,6 +9,8 @@ class Employee(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=True)
-    yob = Column(Date)
+    yob = Column(Integer, nullable=False)
     gender = Column(String(1))
-    email_id=Column(String)
+    email_id = Column(String)
+
+

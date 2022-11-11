@@ -20,7 +20,7 @@ def upgrade() -> None:
     op.create_table('employee',
                     sa.Column('id', sa.Integer(), nullable=False),
                     sa.Column('name', sa.String(), nullable=True),
-                    sa.Column('yob', sa.Date(), nullable=True),
+                    sa.Column('yob', sa.Integer(), nullable=True),
                     sa.PrimaryKeyConstraint('id'),
                     sa.UniqueConstraint('name')
                     )

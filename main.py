@@ -1,4 +1,7 @@
+from datetime import date
+
 from fastapi import FastAPI, Body, HTTPException
+from starlette.responses import Response
 
 import models
 from database import session, Session
@@ -25,6 +28,7 @@ def get_employee_by_id(emp_id: int):
     return session.query(Employee).filter(Employee.id == emp_id).first()
 
 
+# Handle Errors using IF STATEMENT
 @app.put("/v2/update_employee")
 def update_data(emp: Year):
     with session.begin():
@@ -34,15 +38,22 @@ def update_data(emp: Year):
     return session.query(Employee).filter(Employee.yob == emp.yob).all()
 
 
+# Handle Errors Using Try Catch Block
 @app.post("/v2/update_employees")
-def update_database(old_yob: int = Body(..., embed=True), new_yob: int = Body(..., embed=True)):
-    # if old_yob not in Employee.yob:
-    #     raise HTTPException(status_code=404, detail="Enter correct year")
-    with session.begin():
-        session.query(Employee).filter(Employee.yob == old_yob). \
-            update({Employee.yob: new_yob}, synchronize_session=False)
-        session.commit()
-    return session.query(Employee).filter(Employee.yob == new_yob).all()
+def update_database(old_yob=Body(..., embed=True), new_yob: int = Body(..., embed=True)):
+    try:
+        today = date.today()
+
+        if new_yob > today.year:
+            return Response("Bad Request", status_code=400)
+        else:
+            with session.begin():
+                session.query(Employee).filter(Employee.yob == old_yob). \
+                    update({Employee.yob: new_yob}, synchronize_session=False)
+                session.commit()
+            return session.query(Employee).filter(Employee.yob == new_yob).all()
+    except:
+        return Response("Year not Found", status_code=404)
 
 
 @app.patch("/v2/delete_employee")
@@ -52,6 +63,12 @@ def delete_data(year: int):
             delete(synchronize_session=False)
         session.commit()
     return session.query(Employee).all()
+
+
+@app.post("/v2/update_email")
+def update_email(email: str):
+    pass
+
 
 @app.get("/ping")
 def print_str():
